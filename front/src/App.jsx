@@ -17,17 +17,10 @@ function App() {
     const [choice, setChoice] = useState(options[0])
     const [codes, setCodes] = useState([])
     const [result, setResult] = useState()
-    useEffect(() => {
-        async function fetchData() {
-            const data = await axios.get("http://api.nbp.pl/api/exchangerates/tables/A/")
-            return data.data[0].rates.map((rate) => {
-                return rate.code
-            })
-        }
+    const url = "http://localhost:8080/exchanges"
 
-        fetchData().then((rates) => {
-            setCodes(rates)
-        })
+    useEffect(() => {
+        fetchData().then(setCodes)
     }, [])
 
     const {register, handleSubmit} = useForm({
@@ -40,36 +33,39 @@ function App() {
 
     function handleChange(event) {
         setChoice(options[event.target.value])
+        setResult(undefined)
     }
 
     async function onSubmit(data) {
-        let res
         switch (choice.value) {
-            case 0:
-                res = await axios.get(`http://localhost:8080/exchanges/${data.code}/${data.date}`)
+            case 0: {
+                const res = await axios.get(`${url}/${data.code}/${data.date}`)
                     .catch((err) => {
                         alert(err.message);
                     })
                 res && setResult(res.data)
                 break
-            case 1:
-                res = await axios.get(`http://localhost:8080/exchanges/${data.code}/minmax/${data.quotations}`)
+            }
+            case 1: {
+                const res = await axios.get(`${url}/${data.code}/minmax/${data.quotations}`)
                     .catch((err) => {
                         alert(err.message);
                     })
                 res && setResult(res.data)
                 break
-            case 2:
-                res = await axios.get(`http://localhost:8080/exchanges/${data.code}/difference/${data.quotations}`)
+            }
+            case 2: {
+                const res = await axios.get(`${url}/${data.code}/difference/${data.quotations}`)
                     .catch((err) => {
                         alert(err.message);
                     })
                 res && setResult(res.data)
+            }
         }
     }
 
     return (
-        <>
+        <div>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Row>
                     <Col>
@@ -112,8 +108,15 @@ function App() {
                     <p>Difference: {result.difference}</p>
                 </>
             }
-        </>
+        </div>
     )
 }
 
 export default App
+
+async function fetchData() {
+    const data = await axios.get("http://api.nbp.pl/api/exchangerates/tables/A/")
+    return data.data[0].rates.map((rate) => {
+        return rate.code
+    })
+}

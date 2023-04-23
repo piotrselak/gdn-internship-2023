@@ -3,7 +3,6 @@ package com.github.piotrselak.gdninternship2023.nbp.controller;
 
 import com.github.piotrselak.gdninternship2023.nbp.repository.NullExchangeRateException;
 import com.github.piotrselak.gdninternship2023.nbp.service.EmptyRateArrayException;
-import com.github.piotrselak.gdninternship2023.nbp.service.ValidationError;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
-    @ExceptionHandler(value = {ValidationError.class, WebClientResponseException.BadRequest.class})
+    @ExceptionHandler(value = {ValidationException.class, WebClientResponseException.BadRequest.class})
     protected ResponseEntity<Object> handleBadRequest(RuntimeException ex, WebRequest request) {
         ApiError err = new ApiError(400, HttpStatus.BAD_REQUEST, ex.getMessage(), LocalDateTime.now());
         return handleExceptionInternal(ex, err,

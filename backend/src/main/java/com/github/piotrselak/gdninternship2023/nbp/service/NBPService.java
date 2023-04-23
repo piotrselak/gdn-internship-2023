@@ -1,13 +1,12 @@
 package com.github.piotrselak.gdninternship2023.nbp.service;
 
+import com.github.piotrselak.gdninternship2023.nbp.controller.ValidationException;
 import com.github.piotrselak.gdninternship2023.nbp.domain.BidAskRate;
 import com.github.piotrselak.gdninternship2023.nbp.domain.BiggestDifference;
 import com.github.piotrselak.gdninternship2023.nbp.domain.MinMaxRates;
 import com.github.piotrselak.gdninternship2023.nbp.domain.Rate;
 import com.github.piotrselak.gdninternship2023.nbp.repository.NBPRepository;
-import com.github.piotrselak.gdninternship2023.nbp.validator.DateValidator;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -21,19 +20,11 @@ public class NBPService {
     }
 
     public Rate getAverageExchangeRate(String code, String date) {
-        if (!code.matches("^[A-z]{3}$")) throw new ValidationError("Currency code lacks proper formatting.");
-        if (!DateValidator.isValid(date)) throw new ValidationError("Given date should have yyyy-mm-dd format.");
-
         return repository.getAverageRate(code, date);
     }
 
     public MinMaxRates getMinMaxRates(String code, int nQuotas) {
-        if (!code.matches("^[A-z]{3}$")) throw new ValidationError("Currency code lacks proper formatting.");
-        if (nQuotas < 1 || nQuotas > 255) throw new ValidationError("Quotation count should be in <1, 255> range.");
-
-        ArrayList<Rate> rates;
-
-        rates = repository.getAverageExchangeRateWithQuotations(code, nQuotas);
+        ArrayList<Rate> rates = repository.getAverageExchangeRateWithQuotations(code, nQuotas);
 
         Optional<Rate> min = rates.stream().min(Rate::compareTo);
         Optional<Rate> max = rates.stream().max(Rate::compareTo);
@@ -44,9 +35,6 @@ public class NBPService {
 
     // highest ask and lowest bid (bid is buy in api)
     public BiggestDifference getBiggestBidAndAskDifference(String code, int nQuotas) {
-        if (!code.matches("^[A-z]{3}$")) throw new ValidationError("Currency code lacks proper formatting.");
-        if (nQuotas < 1 || nQuotas > 255) throw new ValidationError("Quotation count should be in <1, 255> range.");
-
         ArrayList<BidAskRate> rates = repository.getBidAskRateWithQuotations(code, nQuotas);
 
         Optional<Double> lowestBid = rates.stream().map(BidAskRate::bid).min(Double::compareTo);

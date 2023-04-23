@@ -4,7 +4,6 @@ WORKDIR /build
 COPY . .
 RUN apk add maven
 RUN mvn clean package
-CMD ["ls"]
 
 FROM openjdk:17-jdk-alpine
 WORKDIR /app

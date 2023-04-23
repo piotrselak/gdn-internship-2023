@@ -10,7 +10,7 @@ export default function InputChoice(props) {
     }
     return <Form.Group className="mb-5" controlId="formQuotations">
         <Form.Label>Last quotations</Form.Label>
-        <Form.Control {...props.register("quotations")}/>
+        <Form.Control type="number" min="1" max="255"{...props.register("quotations")}/>
     </Form.Group>
 }
 

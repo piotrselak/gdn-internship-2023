@@ -25,14 +25,6 @@ class NBPServiceTest {
         assertEquals(3.5, rate.mid());
     }
 
-    @Test public void givenInvalidCode_whenGetRate_thenThrowException() {
-        assertThrows(ValidationError.class, () -> service.getAverageExchangeRate("US", "2021-01-01"));
-    }
-
-    @Test public void givenInvalidDate_whenGetRate_thenThrowException() {
-        assertThrows(ValidationError.class, () -> service.getAverageExchangeRate("USD", "2021-01"));
-    }
-
     @Test public void givenCodeAndQuotationCount_whenGetMinMaxRates_thenReturnMinMaxRates() {
         Mockito.when(repository.getAverageExchangeRateWithQuotations("USD", 2))
                 .thenReturn(new ArrayList<>() {{
@@ -54,22 +46,6 @@ class NBPServiceTest {
         assertThrows(RuntimeException.class, () -> service.getMinMaxRates("USD", 2));
     }
 
-    @Test public void givenInvalidCode_whenGetMinMaxRates_thenThrowException() {
-        assertThrows(ValidationError.class, () -> service.getMinMaxRates("US", 2));
-    }
-
-    @Test public void givenInvalidQuotationCount_whenGetMinMaxRates_thenThrowException() {
-        assertThrows(ValidationError.class, () -> service.getMinMaxRates("USD", 0));
-    }
-
-    @Test public void givenCodeAndQuotationCount_whenGetMinMaxRates_thenThrowException() {
-        assertThrows(ValidationError.class, () -> service.getMinMaxRates("USD", -1));
-    }
-
-    @Test public void givenCodeAndTooBigQuotationCount_whenGetMinMaxRates_thenThrowException() {
-        assertThrows(ValidationError.class, () -> service.getMinMaxRates("USD", 367));
-    }
-
     @Test public void givenCodeAndQuotationCount_whenGetBiggestBidAndAskDifference_thenReturnBiggestDifference() {
         Mockito.when(repository.getBidAskRateWithQuotations("USD", 2))
                 .thenReturn(new ArrayList<>() {{
@@ -86,22 +62,6 @@ class NBPServiceTest {
         Mockito.when(repository.getBidAskRateWithQuotations("USD", 2))
                 .thenThrow(new EmptyRateArrayException("Couldn't get min and max value from empty collection."));
         assertThrows(RuntimeException.class, () -> service.getBiggestBidAndAskDifference("USD", 2));
-    }
-
-    @Test public void givenInvalidCode_whenGetBiggestBidAndAskDifference_thenThrowException() {
-        assertThrows(ValidationError.class, () -> service.getBiggestBidAndAskDifference("US", 2));
-    }
-
-    @Test public void givenInvalidQuotationCount_whenGetBiggestBidAndAskDifference_thenThrowException() {
-        assertThrows(ValidationError.class, () -> service.getBiggestBidAndAskDifference("USD", 0));
-    }
-
-    @Test public void givenInvalidQuotationCount2_whenGetBiggestBidAndAskDifference_thenThrowException() {
-        assertThrows(ValidationError.class, () -> service.getBiggestBidAndAskDifference("USD", -1));
-    }
-
-    @Test public void givenInvalidQuotationCount3_whenGetBiggestBidAndAskDifference_thenThrowException() {
-        assertThrows(ValidationError.class, () -> service.getBiggestBidAndAskDifference("USD", 367));
     }
 
 }

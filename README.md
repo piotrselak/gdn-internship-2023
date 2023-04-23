@@ -36,6 +36,13 @@ quotations n (n <= 255), provide the max and min average value.
 of last quotations n (n <= 255), provide the major difference between
 the buy and ask rate.
 
+Examples queries to run:
+```bash
+curl http://localhost:8080/exchanges/USD/2023-04-19
+curl http://localhost:8080/exchanges/CAD/2023-04-11
+curl http://localhost:8080/exchanges/USD/minmax/100
+curl http://localhost:8080/exchanges/CAD/minmax/254
+```
 
 
 

@@ -1,15 +1,20 @@
 import PropTypes from "prop-types";
+import Form from "react-bootstrap/Form";
 
 export default function InputChoice(props) {
     if (props.value === 0) {
-        return <></>
-    } else if (props.value === 1) {
-        return <></>
-    } else {
-        return <></>
+        return <Form.Group className="mb-5" controlId="formDate">
+            <Form.Label>Date</Form.Label>
+            <Form.Control type="date" {...props.register("date")} />
+        </Form.Group>
     }
+    return <Form.Group className="mb-5" controlId="formQuotations">
+        <Form.Label>Last quotations</Form.Label>
+        <Form.Control {...props.register("quotations")}/>
+    </Form.Group>
 }
 
 InputChoice.propTypes = {
     value: PropTypes.number.isRequired,
+    register: PropTypes.func.isRequired
 }

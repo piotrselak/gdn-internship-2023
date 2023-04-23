@@ -5,8 +5,7 @@ export default function CodeInput(props) {
     return (
         <Form.Group className="mb-5" controlId="formCurrencyCode">
             <Form.Label>Currency Code</Form.Label>
-            <Form.Select aria-label="Default select example">
-                <option>Open this select menu</option>
+            <Form.Select aria-label="" {...props.register("code")}>
                 {props.codes.map((code, i) => {
                     return <option key={i}>{code}</option>
                 })}
@@ -17,4 +16,5 @@ export default function CodeInput(props) {
 
 CodeInput.propTypes = {
     codes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    register: PropTypes.func.isRequired,
 }

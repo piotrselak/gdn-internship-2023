@@ -107,7 +107,7 @@ function App() {
             }
             {result && choice.value === 2 &&
                 <>
-                    <p>Highest bid value: {result.bid}</p>
+                    <p>Lowest bid value: {result.bid}</p>
                     <p>Highest ask value: {result.ask}</p>
                     <p>Difference: {result.difference}</p>
                 </>

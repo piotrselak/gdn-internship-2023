@@ -4,10 +4,10 @@ import com.github.piotrselak.gdninternship2023.nbp.domain.BiggestDifference;
 import com.github.piotrselak.gdninternship2023.nbp.domain.MinMaxRates;
 import com.github.piotrselak.gdninternship2023.nbp.domain.Rate;
 import com.github.piotrselak.gdninternship2023.nbp.service.NBPService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/exchanges/{code}/")

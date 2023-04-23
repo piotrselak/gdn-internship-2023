@@ -1,11 +1,11 @@
 package com.github.piotrselak.gdninternship2023.nbp.service;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class ValidationError extends RuntimeException {
+
+public class ValidationError extends ResponseStatusException {
     public ValidationError(String message) {
-        super(message);
+        super(HttpStatus.BAD_REQUEST, message);
     }
 }

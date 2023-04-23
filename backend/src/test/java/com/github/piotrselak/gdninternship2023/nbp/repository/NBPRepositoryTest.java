@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// TODO: it should run on another maven cycle, maybe named IT?
 @SpringBootTest
 public class NBPRepositoryTest {
     @Autowired

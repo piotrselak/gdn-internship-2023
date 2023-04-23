@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// TODO: it should run on another maven cycle
+// TODO: it should run on another maven cycle, maybe named IT?
 @SpringBootTest
-public class NBPRepositoryIT {
+public class NBPRepositoryTest {
     @Autowired
     private NBPRepository repository;
 

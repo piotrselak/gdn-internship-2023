@@ -1,10 +1,10 @@
 package com.github.piotrselak.gdninternship2023.nbp.service;
 
-import com.github.piotrselak.gdninternship2023.nbp.domain.ExchangeRate;
+import com.github.piotrselak.gdninternship2023.nbp.domain.BidAskRate;
+import com.github.piotrselak.gdninternship2023.nbp.domain.BiggestDifference;
 import com.github.piotrselak.gdninternship2023.nbp.domain.MinMaxRates;
 import com.github.piotrselak.gdninternship2023.nbp.domain.Rate;
 import com.github.piotrselak.gdninternship2023.nbp.repository.NBPRepository;
-import com.github.piotrselak.gdninternship2023.nbp.repository.NullExchangeRateException;
 import com.github.piotrselak.gdninternship2023.nbp.validator.DateValidator;
 import org.springframework.stereotype.Service;
 
@@ -20,23 +20,33 @@ public class NBPService {
     }
 
     public Rate getAverageExchangeRate(String code, String date) {
-        if (!code.matches("\b[A-z]{3}\b")) throw new ValidationError("Currency code lacks proper formatting.");
+        if (!code.matches("^[A-z]{3}$")) throw new ValidationError("Currency code lacks proper formatting.");
         if (!DateValidator.isValid(date)) throw new ValidationError("Given date should have yyyy-mm-dd format.");
-
-        // TODO: it may cause exception - do smth here
-        return repository
-                .getRate(code, date);
+        return repository.getAverageRate(code, date);
     }
 
     public MinMaxRates getMinMaxRates(String code, int nQuotas) {
-        if (!code.matches("\b[A-z]{3}\b")) throw new ValidationError("Currency code lacks proper formatting.");
+        if (!code.matches("^[A-z]{3}$")) throw new ValidationError("Currency code lacks proper formatting.");
         if (nQuotas < 1 || nQuotas > 255) throw new ValidationError("Quotation count should be in <1, 255> range.");
 
-        ArrayList<Rate> rates = repository.getExchangeRateWithQuotations(code, nQuotas).rates();
+        ArrayList<Rate> rates = repository.getAverageExchangeRateWithQuotations(code, nQuotas);
         Optional<Rate> min = rates.stream().min(Rate::compareTo);
         Optional<Rate> max = rates.stream().max(Rate::compareTo);
         if (min.isEmpty()) throw new EmptyRateArrayException("Couldn't get min and max value from empty collection.");
 
         return new MinMaxRates(min.get(), max.get());
+    }
+
+    // highest ask and lowest bid (bid is buy in api)
+    public BiggestDifference getBiggestBidAndAskDifference(String code, int nQuotas) {
+        if (!code.matches("^[A-z]{3}$")) throw new ValidationError("Currency code lacks proper formatting.");
+        if (nQuotas < 1 || nQuotas > 255) throw new ValidationError("Quotation count should be in <1, 255> range.");
+
+        ArrayList<BidAskRate> rates = repository.getBidAskRateWithQuotations(code, nQuotas);
+        Optional<Double> lowestBid = rates.stream().map(BidAskRate::bid).min(Double::compareTo);
+        Optional<Double> highestAsk = rates.stream().map(BidAskRate::ask).max(Double::compareTo);
+        if (lowestBid.isEmpty())
+            throw new EmptyRateArrayException("Couldn't get min and max value from empty collection.");
+        return new BiggestDifference(lowestBid.get(), highestAsk.get(), Math.abs(highestAsk.get() - lowestBid.get()));
     }
 }

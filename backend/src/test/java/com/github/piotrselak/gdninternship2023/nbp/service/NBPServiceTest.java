@@ -104,9 +104,4 @@ class NBPServiceTest {
         assertThrows(ValidationError.class, () -> service.getBiggestBidAndAskDifference("USD", 367));
     }
 
-    @Test public void givenNonExistentCode_whenGetBiggestBidAndAskDifference_thenThrowException() {
-        Mockito.when(repository.getBidAskRateWithQuotations("AVX", 2))
-                .thenThrow(new RateNotFound());
-        assertThrows(RateNotFound.class, () -> service.getBiggestBidAndAskDifference("AVX", 2));
-    }
 }

@@ -23,13 +23,8 @@ public class NBPService {
     public Rate getAverageExchangeRate(String code, String date) {
         if (!code.matches("^[A-z]{3}$")) throw new ValidationError("Currency code lacks proper formatting.");
         if (!DateValidator.isValid(date)) throw new ValidationError("Given date should have yyyy-mm-dd format.");
-        try {
-            return repository.getAverageRate(code, date);
-        } catch (WebClientResponseException.NotFound e) {
-            throw new RateNotFound();
-        } catch (WebClientResponseException.BadRequest e) {
-            throw new ValidationError("The date provided is outside the valid range.");
-        }
+
+        return repository.getAverageRate(code, date);
     }
 
     public MinMaxRates getMinMaxRates(String code, int nQuotas) {
@@ -37,13 +32,9 @@ public class NBPService {
         if (nQuotas < 1 || nQuotas > 255) throw new ValidationError("Quotation count should be in <1, 255> range.");
 
         ArrayList<Rate> rates;
-        try {
-            rates = repository.getAverageExchangeRateWithQuotations(code, nQuotas);
-        } catch (WebClientResponseException.NotFound e) {
-            throw new RateNotFound();
-        } catch (WebClientResponseException.BadRequest e) {
-            throw new ValidationError("Quotas or code is invalid.");
-        }
+
+        rates = repository.getAverageExchangeRateWithQuotations(code, nQuotas);
+
         Optional<Rate> min = rates.stream().min(Rate::compareTo);
         Optional<Rate> max = rates.stream().max(Rate::compareTo);
         if (min.isEmpty()) throw new EmptyRateArrayException("Couldn't get min and max value from empty collection.");
@@ -56,14 +47,8 @@ public class NBPService {
         if (!code.matches("^[A-z]{3}$")) throw new ValidationError("Currency code lacks proper formatting.");
         if (nQuotas < 1 || nQuotas > 255) throw new ValidationError("Quotation count should be in <1, 255> range.");
 
-        ArrayList<BidAskRate> rates;
-        try {
-            rates = repository.getBidAskRateWithQuotations(code, nQuotas);
-        } catch (WebClientResponseException.NotFound e) {
-            throw new RateNotFound();
-        } catch (WebClientResponseException.BadRequest e) {
-            throw new ValidationError("Quotas or code is invalid.");
-        }
+        ArrayList<BidAskRate> rates = repository.getBidAskRateWithQuotations(code, nQuotas);
+
         Optional<Double> lowestBid = rates.stream().map(BidAskRate::bid).min(Double::compareTo);
         Optional<Double> highestAsk = rates.stream().map(BidAskRate::ask).max(Double::compareTo);
         if (lowestBid.isEmpty())

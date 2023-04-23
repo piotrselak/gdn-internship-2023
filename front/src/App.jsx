@@ -8,6 +8,8 @@ import InputChoice from "./components/InputChoice.jsx";
 import {Button, Col, Row} from "react-bootstrap";
 import {useForm} from "react-hook-form";
 
+import "./App.css"
+
 function App() {
     const options = [
         {label: "Get average exchange rate for a specific date", value: 0},
@@ -82,8 +84,7 @@ function App() {
                     <Col><InputChoice register={register} value={choice.value}/></Col>
                     <Col>
                         <Form.Group className="mb-5" controlId="formSubmit">
-                            <br/>
-                            <Button type="submit">Submit</Button>
+                            <Button className="submit" type="submit">Submit</Button>
                         </Form.Group>
                     </Col>
                 </Row>

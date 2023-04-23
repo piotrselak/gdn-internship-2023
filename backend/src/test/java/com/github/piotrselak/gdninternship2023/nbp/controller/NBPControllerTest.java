@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import static org.junit.jupiter.api.Assertions.*;
-// TODO: add more tests
+
 // The test class will test integration of all components of the application.
 // It's heavier than the service tests. I think that the service tests are enough to test the logic,
 // as the controller is just a wrapper for the service, which takes url arguments.
@@ -37,7 +37,8 @@ class NBPControllerTest {
     }
 
     @Test void givenNonExistingCode_whenGetRateByCodeAndDate_thenThrowException() {
-        assertThrows(WebClientResponseException.NotFound.class, () -> controller.getRateByCodeAndDate("USX", "2023-04-03"));
+        assertThrows(WebClientResponseException.NotFound.class, () ->
+                controller.getRateByCodeAndDate("USX", "2023-04-03"));
     }
 
     // There is no point in testing for actual values - they change.
@@ -52,5 +53,15 @@ class NBPControllerTest {
 
     @Test void givenInvalidN_whenGetRateMinMaxByCodeAndN_thenThrowException() {
         assertThrows(ValidationException.class, () -> controller.getRateMinMaxByCodeAndN("USD", 0));
+    }
+
+    @Test void givenNonExistingCode_whenGetRateMinMaxByCodeAndN_thenThrowException() {
+        assertThrows(WebClientResponseException.NotFound.class, () ->
+                controller.getRateMinMaxByCodeAndN("USX", 3));
+    }
+
+    @Test void givenCodeAndN_whenGetRateDifferenceByCodeAndN_thenReturnBiggestDifference() {
+        var difference = controller.getRateDifferenceByCodeAndN("USD", 3);
+        assertTrue(difference.bid() < difference.ask());
     }
 }

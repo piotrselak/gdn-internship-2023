@@ -48,22 +48,21 @@ function App() {
             case 0:
                 res = await axios.get(`http://localhost:8080/exchanges/${data.code}/${data.date}`)
                     .catch((err) => {
-                        alert(err);
+                        alert(err.message);
                     })
                 res && setResult(res.data)
                 break
             case 1:
                 res = await axios.get(`http://localhost:8080/exchanges/${data.code}/minmax/${data.quotations}`)
                     .catch((err) => {
-                        alert(err);
+                        alert(err.message);
                     })
                 res && setResult(res.data)
                 break
             case 2:
                 res = await axios.get(`http://localhost:8080/exchanges/${data.code}/difference/${data.quotations}`)
                     .catch((err) => {
-                        if (err.response.status === 404) alert("No data for this currency code")
-                        else alert(err);
+                        alert(err.message);
                     })
                 res && setResult(res.data)
         }
@@ -96,7 +95,7 @@ function App() {
             {result && choice.value === 0 &&
                 <>
                     <p>No: {result.no}</p>
-                    <p>Effective date: {result.specificDate}</p>
+                    <p>Effective date: {result.effectiveDate}</p>
                     <p>Average rate: {result.mid}</p>
                 </>
             }

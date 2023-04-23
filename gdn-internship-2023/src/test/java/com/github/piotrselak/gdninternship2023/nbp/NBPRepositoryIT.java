@@ -16,7 +16,7 @@ public class NBPRepositoryIT {
 
     @Test
     public void givenCodeAndDate_whenGetExchangeRate_thenReturnExchangeRate() {
-        ExchangeRate exRate = repository.getAverageExchangeRate("CAD", "2023-04-21");
+        ExchangeRate exRate = repository.getExchangeRate("CAD", "2023-04-21");
         var head = exRate.rates().get(0);
         assertEquals(exRate.code(), "CAD");
         assertEquals(exRate.table(), "A");
@@ -30,6 +30,6 @@ public class NBPRepositoryIT {
     @Test
     public void givenCodeAndWeekendDate_whenGetExchangeRate_thenThrowException() {
         assertThrowsExactly(WebClientResponseException.NotFound.class,
-                () -> repository.getAverageExchangeRate("CAD", "2023-04-22"));
+                () -> repository.getExchangeRate("CAD", "2023-04-22"));
     }
 }

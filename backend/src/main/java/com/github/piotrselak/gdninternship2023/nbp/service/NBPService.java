@@ -27,6 +27,8 @@ public class NBPService {
             return repository.getAverageRate(code, date);
         } catch (WebClientResponseException.NotFound e) {
             throw new RateNotFound();
+        } catch (WebClientResponseException.BadRequest e) {
+            throw new ValidationError("The date provided is outside the valid range.");
         }
     }
 
@@ -39,6 +41,8 @@ public class NBPService {
             rates = repository.getAverageExchangeRateWithQuotations(code, nQuotas);
         } catch (WebClientResponseException.NotFound e) {
             throw new RateNotFound();
+        } catch (WebClientResponseException.BadRequest e) {
+            throw new ValidationError("Quotas or code is invalid.");
         }
         Optional<Rate> min = rates.stream().min(Rate::compareTo);
         Optional<Rate> max = rates.stream().max(Rate::compareTo);
@@ -57,6 +61,8 @@ public class NBPService {
             rates = repository.getBidAskRateWithQuotations(code, nQuotas);
         } catch (WebClientResponseException.NotFound e) {
             throw new RateNotFound();
+        } catch (WebClientResponseException.BadRequest e) {
+            throw new ValidationError("Quotas or code is invalid.");
         }
         Optional<Double> lowestBid = rates.stream().map(BidAskRate::bid).min(Double::compareTo);
         Optional<Double> highestAsk = rates.stream().map(BidAskRate::ask).max(Double::compareTo);

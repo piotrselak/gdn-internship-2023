@@ -13,9 +13,9 @@ public class NBPService {
         this.repository = repository;
     }
 
-    public Rate getAverageExchangeRate(String code, String date) throws Exception {
-        if (!code.matches("\b[A-z]{3}\b")) throw new Exception("TODO");
-        if (!DateValidator.isValid(date)) throw new Exception("TODO");
+    public Rate getAverageExchangeRate(String code, String date) {
+        if (!code.matches("\b[A-z]{3}\b")) throw new ValidationError("Currency code lacks proper formatting.");
+        if (!DateValidator.isValid(date)) throw new ValidationError("Given date should have yyyy-mm-dd format.");
 
         // TODO: it may cause exception - do smth here
         return repository

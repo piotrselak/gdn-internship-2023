@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,9 +37,9 @@ class NBPControllerTest {
         assertThrows(ValidationError.class, () -> controller.getRateByCodeAndDate("USD", "2023-04-0"));
     }
 
-//    @Test void givenNonExistingCode_whenGetRateByCodeAndDate_thenThrowException() {
-//        assertThrows(RateNotFound.class, () -> controller.getRateByCodeAndDate("USX", "2023-04-03"));
-//    }
+    @Test void givenNonExistingCode_whenGetRateByCodeAndDate_thenThrowException() {
+        assertThrows(WebClientResponseException.NotFound.class, () -> controller.getRateByCodeAndDate("USX", "2023-04-03"));
+    }
 
     // There is no point in testing for actual values - they change.
     @Test void givenCodeAndN_whenGetRateMinMaxByCodeAndN_thenReturnMinMaxRates() {

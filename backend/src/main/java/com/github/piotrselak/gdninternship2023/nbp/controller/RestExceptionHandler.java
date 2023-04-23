@@ -13,28 +13,30 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDateTime;
+
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = { EmptyRateArrayException.class, NullExchangeRateException.class})
     protected ResponseEntity<Object> handleInternalServerError(RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = "RateArray is empty. Server malformed response.";
-        return handleExceptionInternal(ex, bodyOfResponse,
+        ApiError err = new ApiError(500, HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), LocalDateTime.now());
+        return handleExceptionInternal(ex, err,
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
     @ExceptionHandler(value = {ValidationError.class, WebClientResponseException.BadRequest.class})
     protected ResponseEntity<Object> handleBadRequest(RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = "Bad request.";
-        return handleExceptionInternal(ex, bodyOfResponse,
+        ApiError err = new ApiError(400, HttpStatus.BAD_REQUEST, ex.getMessage(), LocalDateTime.now());
+        return handleExceptionInternal(ex, err,
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(value = {WebClientResponseException.NotFound.class})
     protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = "Not found.";
-        return handleExceptionInternal(ex, bodyOfResponse,
+        ApiError err = new ApiError(404, HttpStatus.NOT_FOUND, ex.getMessage(), LocalDateTime.now());
+        return handleExceptionInternal(ex, err,
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 }

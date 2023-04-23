@@ -6,7 +6,7 @@ import com.github.piotrselak.gdninternship2023.nbp.domain.Rate;
 import com.github.piotrselak.gdninternship2023.nbp.service.NBPService;
 import org.springframework.web.bind.annotation.*;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/exchanges/{code}/")
 public class NBPController {

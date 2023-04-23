@@ -5,7 +5,7 @@ export default function CodeInput(props) {
     return (
         <Form.Group className="mb-5" controlId="formCurrencyCode">
             <Form.Label>Currency Code</Form.Label>
-            <Form.Select aria-label="" {...props.register("code")}>
+            <Form.Select {...props.register("code")}>
                 {props.codes.map((code, i) => {
                     return <option key={i}>{code}</option>
                 })}

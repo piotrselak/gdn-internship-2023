@@ -1,4 +1,4 @@
-package com.github.piotrselak.gdninternship2023.nbp;
+package com.github.piotrselak.gdninternship2023.nbp.repository;
 
 
 import com.github.piotrselak.gdninternship2023.nbp.domain.ExchangeRate;

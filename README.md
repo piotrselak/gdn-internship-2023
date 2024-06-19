@@ -1,4 +1,3 @@
-# Backend oriented task (Java)
 ## Piotr Selak
 -------
 
